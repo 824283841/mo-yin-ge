@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>墨隐阁 · 续写</title>
+    <style>
+        body { background: #12100e; color: #f0e9dc; font-family: system-ui; padding: 16px; max-width: 500px; margin: 0 auto; }
+        .card { background: #1b1815; padding: 16px; border-radius: 12px; margin-bottom: 16px; }
+        textarea { width: 100%; min-height: 120px; background: #171310; color: #f0e9dc; border: 1px solid #3a3228; border-radius: 8px; padding: 10px; font-size: 16px; }
+        button { background: #d4af7a; color: #12100e; border: none; padding: 10px 20px; border-radius: 999px; font-size: 16px; font-weight: bold; }
+        .output { background: #171310; padding: 12px; border-radius: 8px; margin-top: 12px; white-space: pre-wrap; }
+        .row { display: flex; gap: 10px; margin-top: 10px; }
+        .row input { flex: 1; background: #171310; color: #f0e9dc; border: 1px solid #3a3228; border-radius: 8px; padding: 10px; }
+        .balance { margin-top: 8px; color: #b3a894; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <h1>📖 墨隐阁</h1>
+
+    <div class="card">
+        <h3>✍️ 续写</h3>
+        <textarea id="draft" placeholder="粘贴你的段落，AI接着写……"></textarea>
+        <button onclick="doWrite()">续写下一段</button>
+        <div class="output" id="output">等待你的文字……</div>
+    </div>
+
+    <div class="card">
+        <h3>🔑 兑换</h3>
+        <div class="row">
+            <input id="codeInput" placeholder="YD-2026-8888">
+            <button onclick="doRedeem()">兑换</button>
+        </div>
+        <div id="msg" style="font-size:14px; margin-top:6px;"></div>
+        <div class="balance">额度：<span id="bal">5000</span> 字</div>
+    </div>
+
+    <script>
+        let balance = 5000;
+        const codes = ['YD-2026-8888', 'YD-0724-1688', 'YD-8888-6666'];
+
+        function doWrite() {
+            const draft = document.getElementById('draft').value.trim();
+            const out = document.getElementById('output');
+            if (!draft) { out.innerText = '请先写一段文字。'; return; }
+            if (balance < 200) { out.innerText = '额度不足，请兑换。'; return; }
+            const list = [
+                '他停住脚步，风从巷口灌进来，带着旧书页和湿木头的气味。',
+                '夜色比他想的要深。街灯在远处亮着，他恰好站在光与暗的交界处。',
+                '琴声停了。他等了片刻，没有第二声，仿佛一切都是错觉。'
+            ];
+            const text = list[Math.floor(Math.random() * list.length)];
+            balance -= 200;
+            document.getElementById('bal').innerText = balance;
+            out.innerText = draft + '\n\n' + text;
+        }
+
+        function doRedeem() {
+            const code = document.getElementById('codeInput').value.trim().toUpperCase();
+            const msg = document.getElementById('msg');
+            if (codes.includes(code)) {
+                balance += 2000;
+                document.getElementById('bal').innerText = balance;
+                msg.innerText = '✅ +2000字';
+                msg.style.color = '#8fca8a';
+            } else {
+                msg.innerText = '❌ 无效码';
+                msg.style.color = '#e08888';
+            }
+        }
+    </script>
+</body>
+</html>
